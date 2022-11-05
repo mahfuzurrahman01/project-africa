@@ -1,0 +1,7 @@
+.img::before{
+    content: '';
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(to right,rgba(0, 0, 0, 0.578),rgba(128, 128, 128, 0.479));
+    position: absolute;
+}
