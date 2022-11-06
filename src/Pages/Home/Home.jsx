@@ -3,11 +3,12 @@ import { SiPolymerproject, SiGoogleearth } from 'react-icons/si'
 import { FaChild } from 'react-icons/fa'
 import './Home.css'
 import image from '../../Assets/images/medium-shot-smiley-kids-posing-together.jpg'
+import Projects from '../Projects';
 const Home = () => {
     return (
         <div>
             <div className='relative img' >
-                <img src={image} alt="" className='w-full' />
+                <img src={image} alt="" className='' />
                 <div className=' left-48 right-48 text-gray-100  text-center absolute top-1/2 uppercase'>
                     <div className='flex flex-col gap-4'>
                         <h1 className='text-5xl font-extrabold'>Are You Ready to help?</h1>
@@ -39,6 +40,7 @@ const Home = () => {
                     <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Distinctio doloribus tempora voluptates officia molestiae dolores atque, consequuntur incidunt nam laboriosam nihil dolor magni, non voluptatem sint, rem veritatis. Laudantium, sequi voluptatem. Quisquam aperiam fugiat et molestiae iure. Aliquid corrupti vero assumenda ut. Id sed quia labore placeat nemo culpa dicta.</p>
                 </div>
             </div>
+            <Projects></Projects>
         </div>
     );
 };

@@ -1,44 +1,62 @@
-import React, { useContext } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 
-const Login = () => {
-    const { loginUser } = useContext(AuthContext);
-    const location = useLocation()
-    const navigate = useNavigate()
-    const from = location.state?.from?.pathname || '/';
-    const loginHandle = event => {
+const Register = () => {
+    const { createUser } = useContext(AuthContext);
+    const [userData, setUserData] = useState({})
+    const registerHandle = event => {
         event.preventDefault()
-        const form = event.target;
-        const email = form.email.value;
-        const password = form.password.value;
-        loginUser(email, password)
-            .then(res => {
-                const user = res.user;
+        const name = event.target.name.value;
+        const email = event.target.email.value;
+        const password = event.target.password.value;
+        console.log(name, email, password)
+        createUser(email, password)
+            .then(result => {
+                const user = result.user;
                 console.log(user)
-                navigate(from, { replace: true })
+                fetch('http://localhost:5000/user', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                })
+                .then(res => res.json())
+                .then(data => console.log(data))
             })
-            .catch(err => {
-                console.log(err)
-            })
+            .catch(err => console.log(err))
+
+
     }
 
+    const onBlurHandle = event => {
+        event.preventDefault()
+        const field = event.target.name;
+        const value = event.target.value;
+        const newUser = { ...userData }
+        newUser[field] = value
+        setUserData(newUser)
+        console.log(newUser)
+    }
     return (
         <div className="w-full max-w-md p-8 space-y-3 mx-auto mb-10   bg-gray-100">
-            <h1 className="text-2xl font-bold text-center text-lime-500">Login</h1>
-            <form onSubmit={loginHandle} noValidate="" action="" className="space-y-6 ng-untouched ng-pristine ng-valid">
+            <h1 className="text-2xl font-bold text-center text-lime-500">Register</h1>
+            <form onSubmit={registerHandle} noValidate="" action="" className="space-y-6 ng-untouched ng-pristine ng-valid">
+                <div className="space-y-1 text-sm">
+                    <label htmlFor="username" className="block     text-gray-400">Username</label>
+                    <input onBlur={onBlurHandle} type="text" name="name" id="username" placeholder="Username" className="w-full px-4 py-3   bg-gray-50    text-gray-700      border border-lime-500" />
+                </div>
                 <div className="space-y-1 text-sm">
                     <label htmlFor="email" className="block     text-gray-400">Email</label>
-                    <input type="email" name="email" id="email" placeholder="Your email" className="w-full px-4 py-3   bg-gray-50    text-gray-700      border border-lime-500" />
+                    <input onBlur={onBlurHandle} type="email" name="email" id="email" placeholder="Your email" className="w-full px-4 py-3   bg-gray-50    text-gray-700      border border-lime-500" />
                 </div>
                 <div className="space-y-1 text-sm">
                     <label htmlFor="password" className="block     text-gray-400">Password</label>
                     <input type="password" name="password" id="password" placeholder="Password" className="w-full px-4 py-3           bg-gray-50    text-gray-700      border  border-lime-500" />
-                    <div className="flex justify-end text-xs     text-gray-400">
-                        <a rel="noopener noreferrer" href="   ">Forgot Password?</a>
-                    </div>
+
                 </div>
-                <button className="block w-full p-3 text-center  bg-lime-500 hover:bg-lime-600 duration-200 text-white  text-semibold">Sign in</button>
+                <button type='submit' className="block w-full p-3 text-center  bg-lime-500 hover:bg-lime-600 duration-200 text-white  text-semibold">Sign Up</button>
             </form>
             <div className="flex items-center pt-4 space-x-1">
                 <div className="flex-1 h-px sm:w-16     bg-gray-700"></div>
@@ -62,11 +80,11 @@ const Login = () => {
                     </svg>
                 </button>
             </div>
-            <p className="text-xs text-center sm:px-6     text-gray-400">Don't have an account?
-                <Link rel="noopener noreferrer" to='/register' className="underline     text-lime-500">Sign up</Link>
+            <p className="text-xs text-center sm:px-6 text-gray-400">Already have an account?
+                <Link rel="noopener noreferrer" to='/login' className="underline   text-lime-500">login</Link>
             </p>
         </div>
     );
 };
 
-export default Login;
+export default Register;
